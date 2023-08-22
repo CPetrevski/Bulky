@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bulky.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230817055433_AddProductModelAndSeed")]
-    partial class AddProductModelAndSeed
+    [Migration("20230822085955_AddCategoryAndProductTablesAndSeed")]
+    partial class AddCategoryAndProductTablesAndSeed
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -77,6 +77,9 @@ namespace Bulky.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -103,6 +106,8 @@ namespace Bulky.DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("Products");
 
                     b.HasData(
@@ -110,6 +115,7 @@ namespace Bulky.DataAccess.Migrations
                         {
                             Id = 1,
                             Author = "Billy Spark",
+                            CategoryId = 1,
                             Description = "Example Description for the selected book",
                             ISBN = "PWSC111111101",
                             ListPrice = 99.0,
@@ -122,6 +128,7 @@ namespace Bulky.DataAccess.Migrations
                         {
                             Id = 2,
                             Author = "Nancy Hoover",
+                            CategoryId = 2,
                             Description = "Example Description for the selected book",
                             ISBN = "LK55111111101",
                             ListPrice = 40.0,
@@ -134,6 +141,7 @@ namespace Bulky.DataAccess.Migrations
                         {
                             Id = 3,
                             Author = "Julian Button",
+                            CategoryId = 3,
                             Description = "Example Description for the selected book",
                             ISBN = "ZZZZ1111111101",
                             ListPrice = 55.0,
@@ -146,6 +154,7 @@ namespace Bulky.DataAccess.Migrations
                         {
                             Id = 4,
                             Author = "Abby Muscles",
+                            CategoryId = 2,
                             Description = "Example Description for the selected book",
                             ISBN = "WSJW1111111101",
                             ListPrice = 70.0,
@@ -158,6 +167,7 @@ namespace Bulky.DataAccess.Migrations
                         {
                             Id = 5,
                             Author = "Ron Parker",
+                            CategoryId = 2,
                             Description = "Example Description for the selected book",
                             ISBN = "S0TJ1111111101",
                             ListPrice = 30.0,
@@ -170,6 +180,7 @@ namespace Bulky.DataAccess.Migrations
                         {
                             Id = 6,
                             Author = "Laura Phanton",
+                            CategoryId = 1,
                             Description = "Example Description for the selected book",
                             ISBN = "F0T01111111101",
                             ListPrice = 25.0,
@@ -178,6 +189,17 @@ namespace Bulky.DataAccess.Migrations
                             Price5 = 22.0,
                             Title = "Leaves and Wonders"
                         });
+                });
+
+            modelBuilder.Entity("Bulky.Models.Product", b =>
+                {
+                    b.HasOne("Bulky.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
                 });
 #pragma warning restore 612, 618
         }
