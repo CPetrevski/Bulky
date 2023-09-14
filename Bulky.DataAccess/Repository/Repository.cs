@@ -14,17 +14,17 @@ namespace Bulky.DataAccess.Repository
     public class Repository<T> : IRepository<T> where T : class
     {
         private readonly ApplicationDbContext _db;
-        internal DbSet<T> dbSet;
+        internal DbSet<T> _db;
         public Repository(ApplicationDbContext db)
         {
             _db = db;
-            this.dbSet = _db.Set<T>();
+            this._db = _db.Set<T>();
             // _db.Categories == dbSet;
             _db.Products.Include(u => u.Category).Include(u => u.CategoryId);
         }
         public void Add(T entity)
         {
-            dbSet.Add(entity);
+            _db.Add(entity);
         }
 
         public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false)
@@ -32,12 +32,12 @@ namespace Bulky.DataAccess.Repository
             IQueryable<T> query;
             if (tracked)
             {
-                query = dbSet;
+                query = _db;
                 
             }
             else
             {
-                query = dbSet.AsNoTracking();
+                query = _db.AsNoTracking();
                 
             }
 
@@ -55,7 +55,7 @@ namespace Bulky.DataAccess.Repository
 
         public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter, string? includeProperties = null)
         {
-            IQueryable<T> query = dbSet;
+            IQueryable<T> query = _db;
 
             if(filter != null)
             {
@@ -77,12 +77,12 @@ namespace Bulky.DataAccess.Repository
 
         public void Remove(T entity)
         {
-            dbSet.Remove(entity);
+            _db.Remove(entity);
         }
 
         public void RemoveRange(IEnumerable<T> entity)
         {
-            dbSet.RemoveRange(entity);
+            _db.RemoveRange(entity);
         }
     }
 }
