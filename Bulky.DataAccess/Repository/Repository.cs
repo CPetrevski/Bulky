@@ -14,11 +14,11 @@ namespace Bulky.DataAccess.Repository
     public class Repository<T> : IRepository<T> where T : class
     {
         private readonly ApplicationDbContext _db;
-        internal DbSet<T> _db;
+        internal DbSet<T> dbSet;
         public Repository(ApplicationDbContext db)
         {
             _db = db;
-            this._db = _db.Set<T>();
+            this.dbSet = _db.Set<T>();
             // _db.Categories == dbSet;
             _db.Products.Include(u => u.Category).Include(u => u.CategoryId);
         }
@@ -32,12 +32,12 @@ namespace Bulky.DataAccess.Repository
             IQueryable<T> query;
             if (tracked)
             {
-                query = _db;
+                query = dbSet;
                 
             }
             else
             {
-                query = _db.AsNoTracking();
+                query = dbSet.AsNoTracking();
                 
             }
 
@@ -55,7 +55,7 @@ namespace Bulky.DataAccess.Repository
 
         public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter, string? includeProperties = null)
         {
-            IQueryable<T> query = _db;
+            IQueryable<T> query = dbSet;
 
             if(filter != null)
             {
