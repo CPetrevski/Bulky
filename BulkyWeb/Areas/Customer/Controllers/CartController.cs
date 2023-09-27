@@ -21,12 +21,13 @@ namespace BulkyWeb.Areas.Customer.Controllers
 
 		[BindProperty]
 		public ShoppingCartVM ShoppingCartVM { get; set; }
+
 		public CartController(IUnitOfWork unitOfWork)
 		{
 			_unitOfWork = unitOfWork;
 		}
 
-		public IActionResult Index()
+        public IActionResult Index()
 		{
 			var claimsIdentity = (ClaimsIdentity)User.Identity;
 			var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
