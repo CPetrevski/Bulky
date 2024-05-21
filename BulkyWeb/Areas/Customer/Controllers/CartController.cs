@@ -151,13 +151,11 @@ namespace BulkyWeb.Areas.Customer.Controllers
 			{
 				// reugular customer account - capture payment
 				//stripe logic
-
 				var domain = "https://localhost:7062/";
-
                 var options = new SessionCreateOptions
 				{
 					SuccessUrl = domain + $"customer/cart/OrderConfirmation?id={ShoppingCartVM.OrderHeader.Id}",
-					CancelUrl = domain + "customer/cart/index",
+					CancelUrl = domain + $"customer/cart/index",
 					LineItems = new List<SessionLineItemOptions>(),					
 					Mode = "payment",
 				};
